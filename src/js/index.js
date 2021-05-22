@@ -4,31 +4,24 @@ const bodyRef = document.querySelector('body');
 const startRef = document.querySelector('[data-action="start"]');
 const stopRef = document.querySelector('[data-action="stop"]');
 
-let colorIntervall;
-// Напиши скрипт, который после нажатия кнопки Start,
-// раз в секунду меняет цвет фона body на случайное значение
-// из массива используя инлайн-стиль.
-// При нажатии на кнопку Stop,
-// изменение цвета фона должно останавливаться.
+let colorIntervall = null;
 
-// ⚠️ Учти, на кнопку Start можно нажать бесконечное количество раз.
-// Сделай так, чтобы пока изменение темы запушено,
-// кнопка Start была не активна.
-
-// Для генерации случайного числа (индекс элемента массива цветов),
-//  используй функцию randomIntegerFromInterval.
 startRef.addEventListener('click', clickOnBtnStart);
 
+// Рандомайзер
 const randomIntegerFromInterval = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
+// Получает цвет из базы цветов
 const getColor = color => colorsData[color];
 
+// Задает на боди рандомный цвет
 const randomColor = () =>
   (bodyRef.style.backgroundColor = getColor(randomIntegerFromInterval(0, 5)));
-// colors '#FFFFFF', '#2196F3', '#4CAF50', '#FF9800', '#009688', '#795548';
 
+// Снимает EventListener с кнопки Старт и вешает на Стоп,
+// Задает значение интервалу (с рандомным цветом)
 function clickOnBtnStart() {
   stopRef.addEventListener('click', clickOnBtnStop);
   startRef.removeEventListener('click', clickOnBtnStart);
@@ -36,8 +29,11 @@ function clickOnBtnStart() {
   colorIntervall = setInterval(randomColor, 1000);
 }
 
+// Снимает EventListener с кнопки Стоп и вешает на Старт,
+// очищает значение интервала
 function clickOnBtnStop() {
   startRef.addEventListener('click', clickOnBtnStart);
   stopRef.removeEventListener('click', clickOnBtnStop);
+
   clearInterval(colorIntervall);
 }
